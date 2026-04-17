@@ -198,7 +198,7 @@ export function DashboardPage() {
 
   return (
     <section className="portal-section dashboard-page">
-      <LoaderOverlay open={isFetchingUserDetails || isFetchingSummary} text="cboi Portal Loading..." />
+      <LoaderOverlay open={isFetchingUserDetails} inline />
 
       <h1 className="portal-section__title">Dashboard</h1>
 
@@ -241,6 +241,7 @@ export function DashboardPage() {
       </div>
 
       <div className="stats-grid">
+        <LoaderOverlay open={isFetchingSummary} inline />
         <StatCard
           label="Total No Of Transaction"
           value={formatCount(summaryData.count)}

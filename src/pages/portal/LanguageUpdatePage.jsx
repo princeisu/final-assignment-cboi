@@ -308,8 +308,9 @@ export function LanguageUpdatePage() {
   return (
     <section className="portal-section language-update-page">
       <LoaderOverlay
-        open={isInitializingPage || isUpdatingLanguage}
-        text="cboi Portal Loading..."
+        open={isUpdatingLanguage}
+        inline
+        text="Updating Language..."
       />
       <Snackbar
         open={snackbarState.open}
@@ -327,6 +328,7 @@ export function LanguageUpdatePage() {
       <h1 className="portal-section__title">Language Update</h1>
 
       <form className="language-update-card" onSubmit={handleSubmit}>
+        <LoaderOverlay open={isInitializingPage} inline />
         <div className="language-update-grid">
           <label className="language-update-field">
             <span>VPA ID</span>

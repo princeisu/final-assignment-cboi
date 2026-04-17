@@ -427,7 +427,6 @@ export function ReportsPage() {
 
   return (
     <section className="portal-section reports-page">
-      <LoaderOverlay open={isFetchingReports} text="cboi Portal Loading..." />
       <Snackbar
         open={snackbarState.open}
         message={snackbarState.message}
@@ -543,6 +542,7 @@ export function ReportsPage() {
       </div>
 
       <div className="reports-table-card">
+        <LoaderOverlay open={isFetchingReports} inline />
         <div className="reports-table-card__toolbar">
           <label className="reports-search">
             <input

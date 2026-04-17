@@ -706,6 +706,14 @@
   justify-content: center;
   background: rgba(15, 23, 42, 0.16);
   backdrop-filter: blur(2px);
+  transition: opacity 0.2s ease;
+}
+
+.portal-loader-overlay.is-inline {
+  position: absolute;
+  z-index: 10;
+  border-radius: inherit;
+  background: rgba(255, 255, 255, 0.6);
 }
 
 .portal-loader {
@@ -792,6 +800,15 @@
   background: #ffffff;
   flex: 1;
   min-height: 0;
+}
+
+.help-support-panel {
+  background: #ffffff;
+  border: 1px solid #eef2f5;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  min-height: 400px;
 }
 
 .profile-details-card {
@@ -890,6 +907,8 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 22px;
+  position: relative;
+  min-height: 140px;
 }
 
 .dashboard-header-row {
@@ -1073,6 +1092,8 @@
   border: 1px solid #edf1f4;
   border-radius: 8px;
   padding: 16px 14px 18px;
+  position: relative;
+  min-height: 240px;
 }
 
 .language-update-grid {
@@ -1200,12 +1221,21 @@
   gap: 12px;
 }
 
-.reports-filter-card,
+.reports-filter-card {
+  background: #ffffff;
+  border: 1px solid #edf1f4;
+  border-radius: 10px;
+  box-shadow: 0 8px 18px rgba(22, 33, 44, 0.04);
+  position: relative;
+}
+
 .reports-table-card {
   background: #ffffff;
   border: 1px solid #edf1f4;
   border-radius: 10px;
   box-shadow: 0 8px 18px rgba(22, 33, 44, 0.04);
+  position: relative;
+  min-height: 200px;
 }
 
 .reports-filter-card {
@@ -1566,7 +1596,8 @@
 }
 
 .qr-details-panel {
-  padding: 16px;
+  padding: 18px 22px 20px;
+  position: relative;
 }
 
 .qr-details-panel__header {
@@ -3222,4 +3253,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .has-submenu {
   user-select: none;
+}
+.portal-section {
+  position: relative;
 }

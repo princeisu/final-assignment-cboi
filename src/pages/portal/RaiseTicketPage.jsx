@@ -376,7 +376,7 @@ export function RaiseTicketPage() {
 
   return (
     <section className="portal-section raise-ticket-page" style={{ padding: '24px', background: '#F8FAFC', minHeight: '100vh' }}>
-      <LoaderOverlay open={isSubmitting || isLoadingDropdowns} text={isSubmitting ? "Raising Ticket..." : "Loading form options..."} />
+      <LoaderOverlay open={isSubmitting} text="Raising Ticket..." />
       <Snackbar
         open={snackbarState.open}
         message={snackbarState.message}
@@ -414,7 +414,8 @@ export function RaiseTicketPage() {
         </div>
       </div>
 
-      <div className="raise-ticket-container" style={{ background: '#fff', borderRadius: '12px', padding: '24px', border: '1px solid #E2E8F0', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+      <div className="raise-ticket-container" style={{ background: '#fff', borderRadius: '12px', padding: '24px', border: '1px solid #E2E8F0', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', position: 'relative' }}>
+        <LoaderOverlay open={isLoadingDropdowns} inline text="Loading form options..." />
         <div className="raise-ticket-title-bar" style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '32px' }}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="#64748B" stroke="none">
             <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z M4 22v-7" stroke="#64748B" strokeWidth="2" fill="none" />

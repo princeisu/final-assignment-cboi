@@ -262,7 +262,6 @@ export function QrDetailsPage() {
 
   return (
     <section className="portal-section qr-details-page">
-      <LoaderOverlay open={isFetchingStaticQr} text="CBIO Portal Loading..." />
       <Snackbar
         open={snackbarState.open}
         message={snackbarState.message}
@@ -275,6 +274,7 @@ export function QrDetailsPage() {
       <h1 className="portal-section__title">QR Details</h1>
 
       <div className="qr-details-panel">
+        <LoaderOverlay open={isFetchingStaticQr} inline />
         <div className="qr-details-panel__header">
           <div>
             <p className="qr-details-panel__label">Select The Type of QR</p>

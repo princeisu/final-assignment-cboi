@@ -234,7 +234,7 @@ export function HelpSupportPage() {
 
   return (
     <section className="portal-section help-support-page">
-      <LoaderOverlay open={isLoading || isSubmitting} text={isLoading ? "Loading Tickets..." : "Raising Ticket..."} />
+      <LoaderOverlay open={isSubmitting} inline text="Raising Ticket..." />
       <Snackbar
         open={snackbarState.open}
         message={snackbarState.message}
@@ -249,6 +249,7 @@ export function HelpSupportPage() {
       </div>
 
       <div className="help-support-panel v3">
+        <LoaderOverlay open={isLoading} inline />
         <div className="help-support-filters-v3">
           <div className="filter-row">
             <div className="filter-group">
