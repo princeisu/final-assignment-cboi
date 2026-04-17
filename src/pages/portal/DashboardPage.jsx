@@ -115,7 +115,7 @@ export function DashboardPage() {
     if (!selectedVpa) return
 
     let isMounted = true
-    
+
     const fetchSummary = async () => {
       try {
         if (isMounted) setIsFetchingSummary(true)
@@ -178,7 +178,7 @@ export function DashboardPage() {
     }
 
     fetchSummary()
-    return () => { 
+    return () => {
       isMounted = false
     }
   }, [selectedVpa, dateFilter])

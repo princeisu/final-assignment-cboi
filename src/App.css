@@ -1,9 +1,9 @@
 :root {
-  --cboi-primary: #1658a0;
-  --cboi-primary-dark: #003a6c;
-  --cboi-primary-soft: #eaf2fb;
-  --cboi-accent: #1658a0;
-  --cboi-accent-soft: #eaf2fb;
+  --cboi-primary: #0070c0;
+  --cboi-primary-dark: #005a9c;
+  --cboi-primary-soft: #e6f4ff;
+  --cboi-accent: #0070c0;
+  --cboi-accent-soft: #e6f4ff;
   --cboi-border: #b3d4f5;
   --cboi-bg: #fafafa;
   --cboi-surface: #ffffff;
@@ -444,9 +444,9 @@
 }
 
 .portal-nav__item.is-active {
-  background: var(--cboi-primary-soft);
-  box-shadow: inset 4px 0 0 var(--cboi-primary);
-  color: var(--cboi-primary);
+  background: #f0f7ff;
+  box-shadow: inset -2px 0 0 #0070c0;
+  color: #0070c0;
   font-weight: 800;
 }
 
@@ -483,6 +483,12 @@
   stroke-width: 1.8;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+
+/* Ant Design Icon fix - Dashboard */
+.portal-nav__icon .anticon svg {
+  fill: currentColor !important;
+  stroke: none !important;
 }
 
 .portal-nav__label {
@@ -865,7 +871,7 @@
 
 .portal-section__title {
   margin: 0 0 20px;
-  color: #1b5398;
+  color: #0070c0;
   font-size: 1.5rem;
   font-weight: 800;
 }
@@ -953,7 +959,7 @@
 .stat-card--amount .stat-card__icon svg {
   width: 22px;
   height: 22px;
-  stroke: #b01e4a;
+  stroke: #0070c0;
 }
 
 .stat-card__label {
@@ -1294,7 +1300,7 @@
 .reports-search input,
 .reports-table-card__meta select,
 .reports-table-card__meta input {
-  height: 34px;
+  height: 40px;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   background: #ffffff;
@@ -1304,6 +1310,32 @@
   box-sizing: border-box;
   transition: all 0.2s ease;
   outline: none;
+}
+
+/* Figma style date input for reports */
+.reports-input-group input[type="date"] {
+  position: relative;
+}
+
+.reports-input-group input[type="date"].is-empty::-webkit-datetime-edit-text,
+.reports-input-group input[type="date"].is-empty::-webkit-datetime-edit-month-field,
+.reports-input-group input[type="date"].is-empty::-webkit-datetime-edit-day-field,
+.reports-input-group input[type="date"].is-empty::-webkit-datetime-edit-year-field {
+  color: transparent !important;
+}
+
+.reports-input-group input[type="date"].is-empty::before {
+  content: attr(data-placeholder);
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+}
+
+.reports-input-group input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
 }
 
 .reports-table-card__meta select:focus,
@@ -1332,7 +1364,7 @@
   padding: 0 18px;
   border: 0;
   border-radius: 4px;
-  background: #1b5398;
+  background: #0070c0;
   color: #ffffff;
   font-size: 0.85rem;
   font-weight: 600;
@@ -1344,7 +1376,7 @@
 }
 
 .reports-action-button:hover {
-  background: #16437a;
+  background: #005a9c;
 }
 
 .reports-action-button--small {
@@ -1995,14 +2027,14 @@
   font-size: 1rem;
   font-weight: 600;
   transition: all 0.2s;
-  border-left: 4px solid transparent;
+  border-right: 2px solid transparent;
 }
 
 .portal-nav__item.is-active {
-  background: #f1f5f9;
-  color: #1b5398;
+  background: #f0f7ff;
+  color: #0070c0;
   font-weight: 800;
-  border-left-color: #1b5398;
+  border-right-color: #0070c0;
 }
 
 .vpa-modal__item {
@@ -2285,9 +2317,38 @@ body,
   padding: 10px 12px;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
-  background-color: #f8fafc;
+  background-color: #ffffff;
   outline: none;
   font-size: 0.92rem;
+  color: #1e293b;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Figma style date input */
+input[type="date"] {
+  position: relative;
+}
+
+input[type="date"].is-empty::-webkit-datetime-edit-text,
+input[type="date"].is-empty::-webkit-datetime-edit-month-field,
+input[type="date"].is-empty::-webkit-datetime-edit-day-field,
+input[type="date"].is-empty::-webkit-datetime-edit-year-field {
+  color: transparent !important;
+}
+
+input[type="date"].is-empty::before {
+  content: attr(data-placeholder);
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
 }
 
 .filter-submit {

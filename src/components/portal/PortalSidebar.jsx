@@ -1,16 +1,9 @@
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
+import { DashboardOutlined } from '@ant-design/icons'
 import cboiLogo from '../../assets/cboi-bank-logo.png'
 
-function DashboardIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M12 3a9 9 0 1 0 9 9h-9Z" />
-      <path d="M13 3a9 9 0 0 1 8 8h-8Z" />
-      <path d="M12 12l4-4" />
-    </svg>
-  )
-}
+
 
 function LanguageIcon() {
   return (
@@ -94,7 +87,7 @@ export function PortalSidebar({ isCollapsed }) {
       <nav className="portal-nav" aria-label="Portal navigation">
         <NavLink to="/dashboard" end className={({ isActive }) => `portal-nav__item${isActive ? ' is-active' : ''}`}>
           <span className="portal-nav__main">
-            <span className="portal-nav__icon"><DashboardIcon /></span>
+            <span className="portal-nav__icon"><DashboardOutlined /></span>
             <span className="portal-nav__label">Dashboard</span>
           </span>
         </NavLink>
@@ -130,7 +123,7 @@ export function PortalSidebar({ isCollapsed }) {
               <ChevronDownIcon />
             </span>
           </div>
-          
+
           <div className="portal-nav__submenu">
             <NavLink to="/help-support/raise" className={({ isActive }) => `portal-nav__submenu-item${isActive ? ' is-active' : ''}`}>
               <span className="portal-nav__main">

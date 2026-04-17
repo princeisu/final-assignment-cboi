@@ -212,8 +212,8 @@ export function ReportsPage() {
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [currentPage, setCurrentPage] = useState(1)
   const [goToPageInput, setGoToPageInput] = useState('1')
-  const [startDate, setStartDate] = useState(todayInputValue)
-  const [endDate, setEndDate] = useState(todayInputValue)
+  const [startDate, setStartDate] = useState('')
+  const [endDate, setEndDate] = useState('')
 
   const [selectedVpa, setSelectedVpa] = useState(() => {
     return window.sessionStorage.getItem(authStorageKeys.selectedVpa) || ''
@@ -378,7 +378,7 @@ export function ReportsPage() {
     if (!startDate || !endDate) {
       setSnackbarState({
         open: true,
-        message: 'Select both start date and end date',
+        message: 'please choose start and end date',
         autoClose: true,
         colorType: 'warning',
       })
@@ -504,6 +504,8 @@ export function ReportsPage() {
                   <span>Start Date</span>
                   <input
                     type="date"
+                    data-placeholder="DD/MM/YYYY"
+                    className={!startDate ? "is-empty" : ""}
                     value={startDate}
                     onChange={(event) => setStartDate(event.target.value)}
                   />
@@ -513,6 +515,8 @@ export function ReportsPage() {
                   <span>End Date</span>
                   <input
                     type="date"
+                    data-placeholder="DD/MM/YYYY"
+                    className={!endDate ? "is-empty" : ""}
                     value={endDate}
                     onChange={(event) => setEndDate(event.target.value)}
                   />

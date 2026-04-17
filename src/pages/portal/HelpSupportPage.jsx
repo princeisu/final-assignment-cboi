@@ -12,8 +12,8 @@ export function HelpSupportPage() {
     return `${day}-${month}-${year}`
   }
 
-  const [startDate, setStartDate] = useState(getTodayStr())
-  const [endDate, setEndDate] = useState(getTodayStr())
+  const [startDate, setStartDate] = useState('')
+  const [endDate, setEndDate] = useState('')
   const [ticketStatus, setTicketStatus] = useState('all')
   const [searchTerm, setSearchTerm] = useState('')
   const [tickets, setTickets] = useState([])
@@ -52,15 +52,25 @@ export function HelpSupportPage() {
   }
 
   const handleReset = () => {
-    setStartDate(getTodayStr())
-    setEndDate(getTodayStr())
+    setStartDate('')
+    setEndDate('')
     setTicketStatus('all')
     setSearchTerm('')
-    // Optionally fetch defaults
-    handleFilterSubmit(true)
   }
 
   const handleFilterSubmit = async (silent = false) => {
+    if (!startDate || !endDate) {
+      if (!silent) {
+        setSnackbarState({
+          open: true,
+          message: 'Please choose start and end date',
+          autoClose: true,
+          colorType: 'warning',
+        })
+      }
+      return
+    }
+
     try {
       setIsLoading(true)
       const payload = {
@@ -255,13 +265,25 @@ export function HelpSupportPage() {
             <div className="filter-group">
               <label>Start Date</label>
               <div className="date-input-wrapper">
-                <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+                <input 
+                  type="date" 
+                  data-placeholder="DD/MM/YYYY"
+                  className={!startDate ? "is-empty" : ""}
+                  value={startDate} 
+                  onChange={(e) => setStartDate(e.target.value)} 
+                />
               </div>
             </div>
             <div className="filter-group">
               <label>End Date</label>
               <div className="date-input-wrapper">
-                <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+                <input 
+                  type="date" 
+                  data-placeholder="DD/MM/YYYY"
+                  className={!endDate ? "is-empty" : ""}
+                  value={endDate} 
+                  onChange={(e) => setEndDate(e.target.value)} 
+                />
               </div>
             </div>
             <div className="filter-actions-v3">
