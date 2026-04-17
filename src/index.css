@@ -32,3 +32,15 @@ input {
 a {
   font: inherit;
 }
+
+/* Hide scrollbars globally */
+::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+* {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}

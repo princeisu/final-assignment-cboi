@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, useCallback } from 'react'
 import { authStorageKeys } from '../../config/authConfig'
 import { apiConfig } from '../../config/apiConfig'
 import { LoaderOverlay } from '../../components/ui/LoaderOverlay'
@@ -31,8 +31,6 @@ function toPngDataUrl(base64Image) {
   return `data:image/png;base64,${base64Image}`
 }
 
-let staticQrRequestPromise = null
-let lastRequestedQrString = ''
 
 export function QrDetailsPage() {
   const [qrType, setQrType] = useState('static')
@@ -51,12 +49,12 @@ export function QrDetailsPage() {
     colorType: 'warning',
   })
 
-  const handleSnackbarClose = () => {
+  const handleSnackbarClose = useCallback(() => {
     setSnackbarState((current) => ({
       ...current,
       open: false,
     }))
-  }
+  }, [])
 
   const trimmedAmount = amountInput.trim()
   const numericAmount = Number(trimmedAmount)
@@ -91,39 +89,16 @@ export function QrDetailsPage() {
       return
     }
 
-    // Instantly load from cache if available!
-    const qrCacheStr = window.sessionStorage.getItem('qr_image_cache') || '{}'
-    const qrCache = JSON.parse(qrCacheStr)
 
-    if (qrCache[qrString]) {
-      setStaticQrImageUrl(toPngDataUrl(qrCache[qrString]))
-      setShowStaticQr(true)
-      return
-    }
-
-    // Avoid redundant calls if the same QR is already being fetched
-    if (staticQrRequestPromise && qrString === lastRequestedQrString) {
-      try {
-        const response = await staticQrRequestPromise
-        const base64Image = response?.base64Image ?? response?.data?.base64Image ?? ''
-        setStaticQrImageUrl(toPngDataUrl(base64Image))
-        setShowStaticQr(true)
-      } catch (e) { /* handled by the main flow */ }
-      return
-    }
 
     try {
       setIsFetchingStaticQr(true)
-      lastRequestedQrString = qrString
-
-      staticQrRequestPromise = apiRequest(apiConfig.staticQrEndpoint, {
+      const response = await apiRequest(apiConfig.staticQrEndpoint, {
         method: 'POST',
         body: JSON.stringify({
           qrString,
         }),
       })
-
-      const response = await staticQrRequestPromise
 
       console.log('[QR Details] static QR response', response)
       const base64Image = response?.base64Image ?? response?.data?.base64Image ?? ''
@@ -132,18 +107,12 @@ export function QrDetailsPage() {
         throw new Error('Missing base64Image in QR response')
       }
 
-      // Save to cache for instant future loads
-      const currentCacheStr = window.sessionStorage.getItem('qr_image_cache') || '{}'
-      const currentCache = JSON.parse(currentCacheStr)
-      currentCache[qrString] = base64Image
-      window.sessionStorage.setItem('qr_image_cache', JSON.stringify(currentCache))
-
       window.sessionStorage.setItem(authStorageKeys.staticQrResponse, JSON.stringify(response))
       setStaticQrImageUrl(toPngDataUrl(base64Image))
       setShowStaticQr(true)
     } catch (error) {
       console.error('[QR Details] Failed to fetch static QR', error)
-      staticQrRequestPromise = null
+
       setSnackbarState({
         open: true,
         message: 'Unable to fetch QR',
@@ -193,6 +162,16 @@ export function QrDetailsPage() {
       setSnackbarState({
         open: true,
         message: 'Enter a valid amount greater than 0.',
+        autoClose: true,
+        colorType: 'warning',
+      })
+      return
+    }
+
+    if (numericAmount > 100000) {
+      setSnackbarState({
+        open: true,
+        message: 'Amount exceeds UPI limit of ₹1,00,000.',
         autoClose: true,
         colorType: 'warning',
       })
@@ -279,11 +258,7 @@ export function QrDetailsPage() {
     return () => clearInterval(timer)
   }, [showDynamicQr, secondsRemaining])
 
-  useEffect(() => {
-    if (qrType === 'static' || qrType === 'dynamic') {
-      handleStaticSubmit()
-    }
-  }, [qrType])
+
 
   return (
     <section className="portal-section qr-details-page">
@@ -327,33 +302,40 @@ export function QrDetailsPage() {
                     setQrType('dynamic')
                     setStaticQrImageUrl('')
                     setShowStaticQr(false)
-                    setSnackbarState({
-                      open: true,
-                      message: 'Currently Dynamic UPI feature is not active',
-                      autoClose: true,
-                      colorType: 'warning',
-                    })
                   }}
                 />
                 <span>Dynamic</span>
               </label>
             </div>
           </div>
+
+          {qrType === 'static' && (
+            <button
+              className="reports-action-button"
+              type="button"
+              onClick={handleStaticSubmit}
+            >
+              Submit
+            </button>
+          )}
         </div>
 
         {qrType === 'dynamic' ? (
           <div className="qr-details-controls">
-            <p className="qr-details-controls__hint" style={{ color: 'var(--portal-danger)', fontWeight: '600', marginBottom: '12px' }}>
-              Dynamic QR is currently not active.
-            </p>
             <div className="qr-details-controls__row">
               <label className="qr-details-controls__field">
                 <span>Amount to be collected</span>
                 <input
                   type="number"
                   placeholder="Enter amount"
+                  max="100000"
                   value={amountInput}
-                  onChange={(e) => setAmountInput(e.target.value)}
+                  onChange={(e) => {
+                    const val = e.target.value
+                    if (val === '' || Number(val) <= 100000) {
+                      setAmountInput(val)
+                    }
+                  }}
                 />
               </label>
 
@@ -361,7 +343,6 @@ export function QrDetailsPage() {
                 className="reports-action-button"
                 type="button"
                 onClick={handleGenerateQr}
-                disabled={true}
               >
                 Generate QR
               </button>
@@ -370,7 +351,7 @@ export function QrDetailsPage() {
         ) : null}
       </div>
 
-      {(qrType === 'static' && showStaticQr) || qrType === 'dynamic' ? (
+      {(qrType === 'static' && showStaticQr) || (qrType === 'dynamic' && showDynamicQr) ? (
         <div className="qr-preview-card">
           <div className="qr-preview-card__inner">
             {qrTitle && <p className="qr-preview-card__eyebrow">{qrTitle}</p>}
