@@ -13,7 +13,6 @@ const initialValues = {
   languageUpdate: '',
 }
 
-const HARDCODED_VPA = '6291777315m@cboiupi'
 
 export function LanguageUpdatePage() {
   const [formValues, setFormValues] = useState(initialValues)
@@ -50,10 +49,6 @@ export function LanguageUpdatePage() {
           ? parsedUserDetails.data
           : [parsedUserDetails])
 
-      // Ensure hardcoded VPA is in the list (matching Dashboard logic)
-      if (!records.some(r => r.vpa_id === HARDCODED_VPA)) {
-        records = [...records, { vpa_id: HARDCODED_VPA }]
-      }
 
       const matchedDetails = selectedVpa
         ? records.find((r) => r.vpa_id === selectedVpa) || records[0]

@@ -19,7 +19,6 @@ const monthlyOptions = [
   'December',
 ]
 
-const HARDCODED_VPA = '6291777315m@cboiupi'
 
 const reportColumns = [
   { key: 'Transaction_Id', label: 'Transaction ID' },
@@ -239,10 +238,6 @@ export function ReportsPage() {
       const parsed = JSON.parse(storedUserDetails)
       let records = Array.isArray(parsed) ? parsed : (parsed?.data ?? [])
 
-      // Ensure hardcoded VPA is in the list
-      if (!records.some(r => r.vpa_id === HARDCODED_VPA)) {
-        records = [...records, { vpa_id: HARDCODED_VPA }]
-      }
 
       if (records[0]?.vpa_id && !selectedVpa) {
         setSelectedVpa(records[0].vpa_id)

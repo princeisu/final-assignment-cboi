@@ -11,6 +11,7 @@ import { QrDetailsPage } from './pages/portal/QrDetailsPage'
 import { ReportsPage } from './pages/portal/ReportsPage'
 import { HelpSupportPage } from './pages/portal/HelpSupportPage'
 import { RaiseTicketPage } from './pages/portal/RaiseTicketPage'
+import { TicketDetailsPage } from './pages/portal/TicketDetailsPage'
 import { logout as logoutUser, saveOidcUserSession } from './services/authService'
 
 function ProtectedRoute({ isLoggedIn, children }) {
@@ -84,6 +85,10 @@ function App() {
         <Route
           path="/help-support/raise"
           element={<RaiseTicketPage />}
+        />
+        <Route
+          path="/help-support/ticket/:id"
+          element={<TicketDetailsPage />}
         />
       </Route>
 

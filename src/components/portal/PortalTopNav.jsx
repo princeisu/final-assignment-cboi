@@ -7,27 +7,6 @@ import { LoaderOverlay } from '../ui/LoaderOverlay'
 import { Snackbar } from '../ui/Snackbar'
 import { apiRequest } from '../../services/apiClient'
 
-function LogoutIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-      <path d="M16 17l5-5-5-5" />
-      <path d="M21 12H9" />
-    </svg>
-  )
-}
-
-function KeyIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <circle cx="8.5" cy="15.5" r="3.5" />
-      <path d="M11 13l8-8" />
-      <path d="M16 5h3v3" />
-      <path d="M14 7l3 3" />
-    </svg>
-  )
-}
-
 function ChevronDownIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -36,10 +15,26 @@ function ChevronDownIcon() {
   )
 }
 
-function MenuIcon() {
+function MenuFoldIcon() {
   return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M4 7h16M4 12h16M4 17h16" />
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="black" stroke="none">
+      <rect x="3" y="5" width="18" height="1.2" fill="black" stroke="none" />
+      <rect x="3" y="17.8" width="18" height="1.2" fill="black" stroke="none" />
+      <rect x="10" y="9.2" width="11" height="1.2" fill="black" stroke="none" />
+      <rect x="10" y="13.6" width="11" height="1.2" fill="black" stroke="none" />
+      <path d="M4 12l4-3v6l-4-3z" fill="black" stroke="none" />
+    </svg>
+  )
+}
+
+function MenuUnfoldIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="black" stroke="none">
+      <rect x="3" y="5" width="18" height="1.2" fill="black" stroke="none" />
+      <rect x="3" y="17.8" width="18" height="1.2" fill="black" stroke="none" />
+      <rect x="3" y="9.2" width="11" height="1.2" fill="black" stroke="none" />
+      <rect x="3" y="13.6" width="11" height="1.2" fill="black" stroke="none" />
+      <path d="M20 12l-4-3v6l4-3z" fill="black" stroke="none" />
     </svg>
   )
 }
@@ -180,7 +175,7 @@ export function PortalTopNav({ isSidebarCollapsed, onToggleSidebar, onLogout }) 
           aria-label={isSidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           onClick={onToggleSidebar}
         >
-          <MenuIcon />
+          {isSidebarCollapsed ? <MenuUnfoldIcon /> : <MenuFoldIcon />}
         </button>
 
         <div className="portal-topnav__actions">
@@ -196,9 +191,6 @@ export function PortalTopNav({ isSidebarCollapsed, onToggleSidebar, onLogout }) 
                 <img src={avatarImg} alt="User Avatar" />
               </div>
               <span>{profileData?.name || profileData?.user_name || 'cboi Portal'}</span>
-              <span className="portal-profile__chevron" aria-hidden="true">
-                <ChevronDownIcon />
-              </span>
             </button>
 
             <div
@@ -213,8 +205,7 @@ export function PortalTopNav({ isSidebarCollapsed, onToggleSidebar, onLogout }) 
                 onClick={handleViewDetails}
                 disabled={isFetchingProfileDetails}
               >
-                <span>{isFetchingProfileDetails ? 'Loading...' : 'View Details'}</span>
-                <KeyIcon />
+                <span>{isFetchingProfileDetails ? 'Loading...' : 'View Profile'}</span>
               </button>
 
               <button
@@ -224,7 +215,6 @@ export function PortalTopNav({ isSidebarCollapsed, onToggleSidebar, onLogout }) 
                 onClick={handleLogout}
               >
                 <span>Logout</span>
-                <LogoutIcon />
               </button>
             </div>
           </div>

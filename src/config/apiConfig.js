@@ -19,6 +19,18 @@ export const apiConfig = {
     import.meta.env.VITE_CREATE_TICKET_ENDPOINT ?? '/CBOI/zendesk/v2/createTicket',
   filterTicketsEndpoint:
     import.meta.env.VITE_FILTER_TICKETS_ENDPOINT ?? '/CBOI/zendesk/v2/filterTickets',
+  closeTicketEndpoint:
+    import.meta.env.VITE_CLOSE_TICKET_ENDPOINT ?? '/CBOI/zendesk/v2/closeStatus',
+  reopenTicketEndpoint:
+    import.meta.env.VITE_REOPEN_TICKET_ENDPOINT ?? '/CBOI/zendesk/v2/reopenStatus',
+  fetchCommentsEndpoint:
+    import.meta.env.VITE_FETCH_COMMENTS_ENDPOINT ?? '/CBOI/zendesk/v2/showComment',
+  createCommentEndpoint:
+    import.meta.env.VITE_CREATE_COMMENT_ENDPOINT ?? '/CBOI/zendesk/v2/createComment',
+  viewTicketEndpoint:
+    import.meta.env.VITE_VIEW_TICKET_ENDPOINT ?? '/CBOI/zendesk/v2/viewTicket',
+  downloadTicketEndpoint:
+    import.meta.env.VITE_DOWNLOAD_TICKET_ENDPOINT ?? 'https://services-cboi-uat.isupay.in/CBOI/zendesk/v2/downloadByID',
   userDetailsSerialNumber:
     import.meta.env.VITE_USER_DETAILS_SERIAL_NUMBER ?? '38241108350403',
   staticAuthorizationToken: import.meta.env.VITE_STATIC_AUTH_TOKEN ?? '',

@@ -29,11 +29,13 @@ function AmountIcon() {
 // Track the fetch promise at the module level to synchronize concurrent requests 
 // (especially for React 18 Strict Mode) and ensure results are shared.
 let userDetailsRequestPromise = null
-let summaryRequestPromise = null
+let activeSummaryRequestParams = ""
+let activeSummaryRequestPromise = null
 
 export function DashboardPage() {
   const [isFetchingUserDetails, setIsFetchingUserDetails] = useState(false)
   const [isFetchingSummary, setIsFetchingSummary] = useState(false)
+  const [hasLoadedSummary, setHasLoadedSummary] = useState(false)
   const [userRecords, setUserRecords] = useState([])
   const [selectedVpa, setSelectedVpa] = useState(() => window.sessionStorage.getItem(authStorageKeys.selectedVpa) || '')
   const [showVpaModal, setShowVpaModal] = useState(false)
@@ -138,9 +140,13 @@ export function DashboardPage() {
           targetDate = getFormattedDate(yesterday)
         }
 
-        // Using reports API to get summary counts. Cached at module level to completely bypass strict-mode double firing.
-        if (!summaryRequestPromise) {
-          summaryRequestPromise = fetch(apiConfig.reportsQuerySubmitUserEndpoint, {
+        const requestParams = `${selectedVpa}_${targetDate}`
+
+        // Synchronize across simultaneous mounts (Strict Mode) using module-level locking
+        // We reuse the promise ONLY if the parameters match AND the promise is still active.
+        if (!activeSummaryRequestPromise || activeSummaryRequestParams !== requestParams) {
+          activeSummaryRequestParams = requestParams
+          activeSummaryRequestPromise = fetch(apiConfig.reportsQuerySubmitUserEndpoint, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -152,28 +158,36 @@ export function DashboardPage() {
               vpa_id: selectedVpa,
               mode: 'both',
             }),
-          }).then(async res => {
+          }).then(async (res) => {
             if (!res.ok) throw new Error(`Summary API failed with status ${res.status}`)
             return res.json()
+          }).catch(err => {
+            throw err
           })
         }
 
-        const response = await summaryRequestPromise.catch((e) => {
-          throw e
-        })
+        const responseData = await activeSummaryRequestPromise
 
         if (!isMounted) return
 
         setSummaryData({
-          count: String(response?.row_count ?? 0),
-          amount: String(response?.total_amount ?? 0),
+          count: String(responseData?.row_count ?? 0),
+          amount: String(responseData?.total_amount ?? 0),
         })
+        setHasLoadedSummary(true)
       } catch (error) {
         console.error('[Dashboard] Failed to fetch summary', error)
-        if (isMounted) setSummaryData({ count: '0', amount: '0' })
+        if (isMounted) {
+          setSummaryData({ count: '0', amount: '0' })
+          setHasLoadedSummary(true)
+        }
       } finally {
-        summaryRequestPromise = null
-        if (isMounted) setIsFetchingSummary(false)
+        // Clear the promise when the component unmounts or finishes so next visits get fresh data
+        // but it stays defined long enough for the Strict Mode remount to catch it.
+        if (isMounted) {
+          activeSummaryRequestPromise = null
+          setIsFetchingSummary(false)
+        }
       }
     }
 
@@ -198,7 +212,7 @@ export function DashboardPage() {
 
   return (
     <section className="portal-section dashboard-page">
-      <LoaderOverlay open={isFetchingUserDetails} inline />
+      <LoaderOverlay open={isFetchingUserDetails || (isFetchingSummary && !hasLoadedSummary)} inline />
 
       <h1 className="portal-section__title">Dashboard</h1>
 
@@ -241,7 +255,7 @@ export function DashboardPage() {
       </div>
 
       <div className="stats-grid">
-        <LoaderOverlay open={isFetchingSummary} inline />
+        <LoaderOverlay open={isFetchingSummary && hasLoadedSummary} inline />
         <StatCard
           label="Total No Of Transaction"
           value={formatCount(summaryData.count)}
